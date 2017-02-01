@@ -228,8 +228,3 @@ class Mysql:
     
 
 
-
-if __name__ == "__main__":
-    print 'Lets start'
-    t = Mysql(0,'test.log')
-    print t.getGreetingPacket()
