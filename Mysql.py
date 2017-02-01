@@ -22,7 +22,8 @@ def log(info):
 class Mysql:
     def __init__(self,packetNumber,w):
         self.m_packetNumber = packetNumber
-        self.m_writer = w
+        #self.m_writer = w
+        self.m_writer = log
         self.m_mysqlDefs = MysqlDefs()
 
     #converts an 32 bit value to a 3 byte array
@@ -178,8 +179,53 @@ class Mysql:
             uNameBytes[runner-0x24] = dataIn[runner]
             runner = runner + 1
         dataIn[runner - 0x24] = 0x0
+        #attack alert 
         outStr = "Login from " + clientIP +  " try with username("+ uNameBytes + ")"
-        m_writer(outStr)
+        print outStr
+
+    #generates an OK packet 
+    def generateOKPacket(packetNumber,affectedRows):
+        log("Info: Starting generation of OK packet with packetnumber " + packetNumber + " and affected rows: " + affectedRows)
+        packet  = [0x0 for i in range(11)]
+        lengthInPacket = self.convert32To3Byte(7)
+
+        packet = self.copyBytes(lengthInPacket, packet, 0, False)
+
+	    packet[3] = (byte)packetNumber
+
+		packet[4] = 0x0					   # dummy byte	
+		packet[5] = (byte)affectedRows	   # affected rows
+
+		packet[6] = 0x2					# server status	
+		packet[7] = 0x0					# server status
+
+		packet[8] = 0x0					# warnings
+		packet[9] = 0x0					# warnings
+		packet[10] = 0x0				# warnings
+        
+        log("Info: Generated OK packet with packetnumber " + packetNumber + " and affected rows: " + affectedRows)
+        return packet
+    
+    #  retrieve query command
+    def handleQueryPacket(dataIn, clientIP,  token,username,  host):
+		# 3 byte packet laenge
+	    # for the moment we ignore the upper two bytes
+        length = dataIn[0]
+        packetNumber = dataIn[3]
+        
+        #allocate dummy buffer for the username
+        uNameBytes =  [0x0 for i in range(1024)]
+        runner = 0x5
+        while (runner != len(dataIn) -1 && dataIn[runner] != 0x0):
+            uNameBytes[runner-0x5] = dataIn[runner]
+            runner = runner + 1
+        dataIn[runner - 0x5] = 0x0
+       
+        #attack alert 
+        log("Query from " + clientIP +  " with command ("  + uNameBytes + ")")
+        return uNameBytes
+
+    
 
 
 
