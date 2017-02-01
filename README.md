@@ -15,5 +15,6 @@ Links
 * Commits RSS feed: https://github.com/xiaoxiaoleo/HoneyMysql/commits/master.atom
 * Issue tracker: https://github.com/xiaoxiaoleo/HoneyMysql/issues
 * User's manual: https://github.com/xiaoxiaoleo/HoneyMysql/wiki
+
 © 2017 by xiaoxiaoleo
 
