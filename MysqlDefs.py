@@ -1,6 +1,6 @@
 class MysqlDefs:
     def __init__(self,):
-        self.serverVersion = "5.5.15"
+        self.serverVersion = "5.5.15" # + 1 for termination
         self.threadID = "1234"
         self.pluginData  = "mysql_native_password"
         #self.scrambleBuf = [11,22,33,44,55,66,77,88]
