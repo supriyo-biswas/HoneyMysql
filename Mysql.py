@@ -3,7 +3,6 @@
 # https://github.com/xiaoxiaoleo/
 # See LICENSE for details
 
-
 import struct
 from array import array
 from MysqlDefs import MysqlDefs
