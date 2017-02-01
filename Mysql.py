@@ -1,5 +1,8 @@
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
 # Auth:xiaoxiaoleo
+# https://github.com/xiaoxiaoleo/
+# See LICENSE for details
+
 
 import struct
 from array import array

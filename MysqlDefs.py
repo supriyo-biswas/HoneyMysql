@@ -1,3 +1,8 @@
+# -*- coding: utf-8 -*-
+# Auth:xiaoxiaoleo
+# https://github.com/xiaoxiaoleo/
+# See LICENSE for details
+
 class MysqlDefs:
     def __init__(self,):
         self.serverVersion = "5.5.15" # + 1 for termination
