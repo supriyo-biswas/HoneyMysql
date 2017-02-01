@@ -4,6 +4,7 @@
 import struct
 from array import array
 import time
+from MysqlDefs import MysqlDefs
 
 
 def log(info):
@@ -48,7 +49,7 @@ class Mysql:
         a = array("B",inStr)
         return map(hex, a)
 
-    #returns 
+    #returns the byte string for given list 
     def convertListToBytes(self,inList):
         res = []
         for b in inList:
@@ -58,8 +59,12 @@ class Mysql:
         res = ''.join(res)
         return res
 
-
+    # returns a Server greeting packet
+    #@in: number of the packet
+    #@out: packet for the client
     def getGreetingPacket(self,packetNumber):
+        packetNumber = self.packetNumber
+
         #create packet and fill it with dummy bytes to attack programming mistake
         length = len(self.m_mysqlDefs.getServerVersion()) + 1 + 1 + 4 + 8 + 1+ 2+ 1+ 2 +2 +  1 + 10+ 1 + 12 + 1 + len(self.m_mysqlDefs.getPluginData())
 
@@ -135,9 +140,51 @@ class Mysql:
         m_packetNumber = self.m_packetNumber + 1
         
         #log(res)
-        return convertListToBytes(packet)
+        return packet
+
+    def getPacketError(data,packetNumber,length,errorNumber):
+		# 3 byte laenge
+        # 3 byte number
+        # 0xff fuellbyte
+        # 2 byte errocode
+        # n String
+
+        dataBack = [0x0 for i in range(len(data)  + 3 + 1 + 1 + 2 )]
+        dataBack[0] = hex(data)
+	    dataBack[1] = 0x00
+		dataBack[2] = 0x00
+			
+		dataBack[3] = 0x00
+
+		dataBack[4] = 0xff
+			
+		dataBack[5] = 0x6a
+	    dataBack[6] = 0x04
+
+        dataBytes = self.getBytes(data)
+        for runner in range(0,len(data)):
+            dataBack[7 + runner] = dataBytes[runner]
+        return dataBack
+			
+    def handleLoginPacket(dataIn,clientIP,token,username,host):
+		# 3 byte packet laenge
+	    # for the moment we ignore the upper two bytes
+        length = dataIn[0]
+        packetNumber = dataIn[3]
+        
+        # allocate dummy buffer for the username
+        uNameBytes  = [0x0 for i in range(1024)]
+        runner = 0x24
+        while (runner != len(dataIn) -1 && dataIn[runner] != 0x0):
+            uNameBytes[runner-0x24] = dataIn[runner]
+            runner = runner + 1
+        dataIn[runner - 0x24] = 0x0
+        outStr = "Login from " + clientIP +  " try with username("+ uNameBytes + ")"
+        m_writer(outStr)
+        
+
 
 if __name__ == "__main__":
     print 'Lets start'
     t = Mysql(0,'test.log')
-    print t.getGreetingPacket(0)
+    print t.getGreetingPacket()
