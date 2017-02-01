@@ -1,3 +1,4 @@
+import time
 def log(info):
     try:
         info = str(info)

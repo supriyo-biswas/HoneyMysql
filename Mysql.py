@@ -3,7 +3,6 @@
 
 import struct
 from array import array
-import time
 from MysqlDefs import MysqlDefs
 
 
@@ -181,7 +180,7 @@ class Mysql:
         dataIn[runner - 0x24] = 0x0
         outStr = "Login from " + clientIP +  " try with username("+ uNameBytes + ")"
         m_writer(outStr)
-        
+
 
 
 if __name__ == "__main__":
