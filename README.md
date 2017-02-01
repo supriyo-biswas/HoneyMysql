@@ -1,4 +1,5 @@
 # HoneyMysql
 A simple Mysql honeypot project
-© 2012 by xiaoxiaoleo
+
+© 2017 by xiaoxiaoleo
 
